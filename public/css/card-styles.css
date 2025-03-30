@@ -1,0 +1,586 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Serif+SC:wght@400;700&family=Space+Mono&family=Playfair+Display:wght@700&display=swap');
+
+/* 卡片容器基础样式 */
+.card-container {
+  display: grid;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* 根据每行卡片数量设置网格列数 */
+.cards-per-row-1 {
+  grid-template-columns: 1fr;
+}
+
+.cards-per-row-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.cards-per-row-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.cards-per-row-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+/* 卡片基础样式 */
+.card {
+  overflow: hidden;
+  position: relative;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+/* 根据不同的宽高比设置卡片 */
+.aspect-16-9 {
+  aspect-ratio: 16/9;
+}
+
+.aspect-4-3 {
+  aspect-ratio: 4/3;
+}
+
+.aspect-1-1 {
+  aspect-ratio: 1/1;
+}
+
+.aspect-3-4 {
+  aspect-ratio: 3/4;
+}
+
+/* 卡片内容基础样式 */
+.card .content {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.card .quote {
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+}
+
+.card .context {
+  font-size: 0.8rem;
+}
+
+/* 1. 优雅复古风格 (VINT) */
+.vintage {
+  background-color: #f9f3e6;
+  color: #3a3a3a;
+  padding: 2.5rem;
+  position: relative;
+}
+
+.vintage::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="none" stroke="%23d9c7a7" stroke-width="0.5"/></svg>');
+  opacity: 0.3;
+}
+
+.vintage .quote {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 1.5rem;
+  line-height: 1.5;
+  position: relative;
+  z-index: 1;
+  color: #5c4b3c;
+}
+
+.vintage .context {
+  font-size: 0.8rem;
+  color: #8c7b6c;
+  font-style: italic;
+  position: relative;
+  z-index: 1;
+}
+
+.vintage .decoration {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M20,50 Q50,20 80,50 T20,50" stroke="%23d9c7a7" fill="none" stroke-width="2"/></svg>');
+  opacity: 0.3;
+  top: 20px;
+  right: 20px;
+}
+
+/* 2. 未来科技风格 (TECH) */
+.futuristic {
+  background-color: #0a0e17;
+  color: #7fdbff;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-family: 'Space Mono', monospace;
+  position: relative;
+  overflow: hidden;
+}
+
+.futuristic::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #7fdbff, transparent);
+  animation: scanline 2s linear infinite;
+}
+
+.futuristic .quote {
+  font-size: 1.4rem;
+  line-height: 1.5;
+  text-shadow: 0 0 10px rgba(127, 219, 255, 0.5);
+  position: relative;
+  z-index: 1;
+}
+
+.futuristic .context {
+  color: #5d8a9e;
+  font-size: 0.8rem;
+  position: relative;
+  z-index: 1;
+}
+
+.futuristic .grid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(rgba(127, 219, 255, 0.05) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(127, 219, 255, 0.05) 1px, transparent 1px);
+  background-size: 20px 20px;
+  z-index: 0;
+}
+
+@keyframes scanline {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(1000%);
+  }
+}
+
+/* 3. 大胆现代风格 (BOLD) */
+.bold-modern {
+  background-color: #222;
+  color: #fff;
+  padding: 2.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.bold-modern .quote {
+  font-size: 2.5rem;
+  line-height: 1.2;
+  font-weight: 800;
+  position: relative;
+  z-index: 2;
+  transform: skew(-5deg);
+  color: #ff3366;
+}
+
+.bold-modern .context {
+  font-size: 0.9rem;
+  color: #fff;
+  position: relative;
+  z-index: 2;
+  margin-left: 1rem;
+}
+
+.bold-modern .shape {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  background-color: #ff3366;
+  opacity: 0.2;
+  top: -50px;
+  right: -50px;
+  border-radius: 0 0 0 100%;
+  z-index: 1;
+}
+
+.bold-modern .shape-2 {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  background-color: #00ccff;
+  opacity: 0.2;
+  bottom: -50px;
+  left: -50px;
+  border-radius: 0 100% 0 0;
+  z-index: 1;
+}
+
+/* 4. 艺术装饰风格 (DECO) */
+.art-deco {
+  background-color: #000;
+  color: #D4AF37;
+  padding: 2.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.art-deco::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+      radial-gradient(circle at 50% 0, #D4AF37 20px, transparent 20px),
+      radial-gradient(circle at 50% 100%, #D4AF37 20px, transparent 20px);
+  background-size: 100px 100%;
+  background-position: 0 0, 50px 0;
+  opacity: 0.1;
+  z-index: 0;
+}
+
+.art-deco .quote {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.7rem;
+  line-height: 1.4;
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+
+.art-deco .context {
+  font-size: 0.8rem;
+  color: #fff;
+  font-weight: 400;
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+
+.art-deco .border {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  border: 2px solid #D4AF37;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.art-deco .corner {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-color: #D4AF37;
+  z-index: 1;
+}
+
+.art-deco .corner-tl {
+  top: 10px;
+  left: 10px;
+  border-top: 2px solid;
+  border-left: 2px solid;
+}
+
+.art-deco .corner-tr {
+  top: 10px;
+  right: 10px;
+  border-top: 2px solid;
+  border-right: 2px solid;
+}
+
+.art-deco .corner-bl {
+  bottom: 10px;
+  left: 10px;
+  border-bottom: 2px solid;
+  border-left: 2px solid;
+}
+
+.art-deco .corner-br {
+  bottom: 10px;
+  right: 10px;
+  border-bottom: 2px solid;
+  border-right: 2px solid;
+}
+
+/* 5. 极简主义风格 (MINI) */
+.minimalist {
+  background-color: white;
+  color: #333;
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.minimalist .quote {
+  font-weight: 300;
+  font-size: 1.5rem;
+  line-height: 1.4;
+}
+
+.minimalist .context {
+  font-size: 0.8rem;
+  color: #888;
+  font-weight: 300;
+}
+
+.minimalist .line {
+  width: 40px;
+  height: 1px;
+  background-color: #ddd;
+  margin: 1rem 0;
+}
+
+/* 6. 斯堪的纳维亚风格 (SCAN) */
+.constructivism {
+  background-color: white;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.constructivism .quote {
+  font-size: 1.6rem;
+  line-height: 1.3;
+  font-weight: 700;
+  color: #000;
+  position: relative;
+  z-index: 2;
+}
+
+.constructivism .context {
+  font-size: 0.9rem;
+  color: #ff0000;
+  position: relative;
+  z-index: 2;
+}
+
+.constructivism .red-square {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background-color: #ff0000;
+  top: 20px;
+  right: 20px;
+  z-index: 1;
+}
+
+.constructivism .black-line {
+  position: absolute;
+  width: 150px;
+  height: 10px;
+  background-color: #000;
+  transform: rotate(45deg);
+  bottom: 50px;
+  left: 30px;
+  z-index: 1;
+}
+
+.constructivism .diagonal {
+  position: absolute;
+  width: 200px;
+  height: 2px;
+  background-color: #000;
+  transform: rotate(-30deg);
+  top: 70px;
+  left: -30px;
+  z-index: 1;
+}
+
+/* 7. 赛博朋克风格 (PUNK) */
+.cyberpunk {
+  background-color: #0a0e17;
+  color: #f0f0f0;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.cyberpunk::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, rgba(255, 0, 128, 0.1) 0%, rgba(0, 255, 255, 0.1) 100%);
+  z-index: 0;
+}
+
+.cyberpunk .quote {
+  font-size: 1.6rem;
+  line-height: 1.4;
+  color: #f0f0f0;
+  text-shadow: 0 0 5px rgba(0, 255, 255, 0.7);
+  position: relative;
+  z-index: 1;
+}
+
+.cyberpunk .context {
+  font-size: 0.8rem;
+  color: #00ffff;
+  font-weight: 400;
+  position: relative;
+  z-index: 1;
+}
+
+.cyberpunk .glitch {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.15),
+      rgba(0, 0, 0, 0.15) 1px,
+      transparent 1px,
+      transparent 2px
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+
+.cyberpunk .highlight {
+  color: #ff00a0;
+}
+
+/* 8. 新未来主义 (JPNM) */
+.neo-futurism {
+  background: linear-gradient(135deg, #2b2b2b 0%, #1a1a1a 100%);
+  color: white;
+  padding: 2.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.neo-futurism .quote {
+  font-size: 1.6rem;
+  line-height: 1.4;
+  position: relative;
+  z-index: 2;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.neo-futurism .context {
+  font-size: 0.9rem;
+  color: #00ccff;
+  position: relative;
+  z-index: 2;
+}
+
+.neo-futurism .curve {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  top: -150px;
+  right: -150px;
+  z-index: 1;
+}
+
+.neo-futurism .curve-2 {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  border: 2px solid rgba(0, 204, 255, 0.1);
+  border-radius: 50%;
+  bottom: -100px;
+  left: -100px;
+  z-index: 1;
+}
+
+.neo-futurism .line {
+  position: absolute;
+  width: 100px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(0, 204, 255, 0.5));
+  top: 50%;
+  right: 0;
+  z-index: 1;
+}
+
+/* 9. 英伦摇滚风格 (BRIT) */
+.british-rock {
+  background-color: #f5f5f5;
+  color: #333;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.british-rock::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="none" stroke="%23ccc" stroke-width="0.5"/></svg>');
+  opacity: 0.2;
+}
+
+.british-rock .quote {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 1.6rem;
+  line-height: 1.4;
+  position: relative;
+  z-index: 1;
+  color: #333;
+}
+
+.british-rock .context {
+  font-size: 0.8rem;
+  color: #666;
+  font-style: italic;
+  position: relative;
+  z-index: 1;
+}
+
+.british-rock .flag {
+  position: absolute;
+  width: 100px;
+  height: 50px;
+  background: linear-gradient(to bottom, transparent 40%, rgba(0, 0, 139, 0.1) 40%, rgba(0, 0, 139, 0.1) 60%, transparent 60%),
+              linear-gradient(to right, transparent 35%, rgba(255, 0, 0, 0.1) 35%, rgba(255, 0, 0, 0.1) 65%, transparent 65%);
+  top: 20px;
+  right: 20px;
+  opacity: 0.5;
+  z-index: 0;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .card-container {
+    grid-template-columns: 1fr !important;
+    padding: 1rem;
+  }
+  
+  .card .quote {
+    font-size: 1.2rem !important;
+  }
+  
+  .card .context {
+    font-size: 0.7rem !important;
+  }
+  
+  .card {
+    padding: 1.5rem !important;
+  }
+}

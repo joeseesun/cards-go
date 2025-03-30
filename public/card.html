@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cards-Go | 生成的卡片</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+  <!-- 添加Tailwind CSS CDN，用于卡片样式 -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <!-- 固定引入Google字体 -->
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Serif+SC:wght@400;700&family=Space+Mono&family=Playfair+Display:wght@700&display=swap');
+    
+    body {
+      font-family: 'Noto Sans SC', sans-serif;
+    }
+  </style>
+  <!-- 动态样式将在这里插入 -->
+  <div id="dynamic-styles"></div>
+</head>
+<body>
+  <div class="container card-page">
+    <header class="card-header">
+      <a href="/" class="back-link">
+        <i class="fas fa-arrow-left"></i> 返回首页
+      </a>
+      <h1>CardsGo</h1>
+      <p class="theme-title">主题：<span id="theme-display"></span></p>
+    </header>
+    
+    <div id="loading" class="loading">
+      <div class="spinner"></div>
+      <p>正在生成卡片，请稍候...</p>
+    </div>
+    
+    <div id="card-container" class="card-container">
+      <!-- 卡片内容将通过JavaScript动态插入 -->
+    </div>
+    
+    <!-- 添加查看源代码和提示词的入口按钮 -->
+    <div class="action-buttons mt-4 flex justify-center space-x-4">
+      <button id="view-source-btn" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded">查看源代码</button>
+      <button id="view-prompt-btn" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded">查看提示词</button>
+    </div>
+  </div>
+  
+  <footer>
+    <p>&copy; 2025 Cards-Go | 使用ARK AI提供支持</p>
+  </footer>
+  
+  <script src="/js/html2canvas.min.js"></script>
+  <script src="/js/card.js"></script>
+</body>
+</html>

@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI卡片生成器 CardsGo</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-container">
+      <div class="logo">
+        <h1>AI卡片生成器</h1>
+      </div>
+      <nav class="main-nav">
+        <a href="#" class="nav-item active">首页</a>
+        <a href="#" class="nav-item" id="donation-btn">打赏作者</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="hero-section">
+      <div class="hero-content">
+        <h2 class="hero-title">将文字转化为精美知识卡片</h2>
+        <p class="hero-subtitle">提取金句，生成设计感强的知识卡片，让学习与分享更加直观</p>
+      </div>
+    </div>
+    
+    <div class="container">
+      <div class="two-column-layout">
+        <div class="content-column">
+          <form id="theme-form" class="theme-form">
+            <div class="form-header">
+              <h3>输入内容</h3>
+              <div class="quick-tags">
+                <span class="tag" data-theme="幸福">幸福</span>
+                <span class="tag" data-theme="成长">成长</span>
+                <span class="tag" data-theme="智慧">智慧</span>
+                <span class="tag" data-theme="爱情">爱情</span>
+                <span class="tag" data-theme="自由">自由</span>
+              </div>
+            </div>
+            
+            <div class="textarea-container">
+              <textarea 
+                id="theme-input" 
+                placeholder="输入文章或主题词，AI提取金句创建卡片或指定文字生成" 
+                required
+                rows="8"
+              ></textarea>
+            </div>
+            
+            <div class="form-actions">
+              <div class="mode-selector">
+                <div class="mode-slider position-0" id="content-mode-slider"></div>
+                <label class="mode-option active" data-position="0" onclick="switchContentMode(this, 'creative')">
+                  <input type="radio" name="mode" value="creative" checked>
+                  提取金句生成
+                </label>
+                <label class="mode-option" data-position="1" onclick="switchContentMode(this, 'literal')">
+                  <input type="radio" name="mode" value="literal">
+                  基于输入生成
+                </label>
+              </div>
+              
+              <script>
+                // 直接在HTML中定义内容处理模式切换函数
+                function switchContentMode(option, mode) {
+                  console.log('切换内容处理模式到:', mode);
+                  
+                  // 选中单选按钮
+                  const radio = option.querySelector('input[type="radio"]');
+                  if (radio) {
+                    radio.checked = true;
+                  }
+                  
+                  // 更新活动状态
+                  document.querySelectorAll('.mode-option').forEach(opt => {
+                    opt.classList.remove('active');
+                  });
+                  option.classList.add('active');
+                  
+                  // 移动滑块
+                  const position = option.getAttribute('data-position');
+                  const slider = document.getElementById('content-mode-slider');
+                  if (slider) {
+                    slider.className = 'mode-slider position-' + position;
+                  }
+                  
+                  // 更新配置
+                  if (window.updateConfigFromInputs) {
+                    window.updateConfigFromInputs();
+                  }
+                }
+              </script>
+              
+              <button type="submit" class="submit-btn">
+                <i class="fas fa-wand-magic-sparkles"></i> 生成卡片
+              </button>
+            </div>
+        
+          </form>
+          
+    
+        </div>
+        
+        <div class="settings-column">
+          <div class="settings-card">
+            <div class="settings-header">
+              <h3>卡片设置</h3>
+              <button type="button" id="reset-defaults" class="reset-btn">
+                <i class="fas fa-undo"></i> 重置默认值
+              </button>
+            </div>
+            
+            <div class="settings-tabs">
+              <button class="tab-btn active" data-tab="basic" onclick="switchTab('basic')">基本设置</button>
+              <button class="tab-btn" data-tab="style" onclick="switchTab('style')">风格设置</button>
+              <button class="tab-btn" data-tab="advanced" onclick="switchTab('advanced')">其他设置</button>
+            </div>
+            
+            <script>
+              // 直接在HTML中定义选项卡切换函数
+              function switchTab(tabName) {
+                console.log('切换到选项卡:', tabName);
+                
+                // 移除所有标签的活动状态
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                  btn.classList.remove('active');
+                });
+                document.querySelectorAll('.tab-content').forEach(content => {
+                  content.classList.remove('active');
+                });
+                
+                // 添加当前标签的活动状态
+                document.querySelector(`.tab-btn[data-tab="${tabName}"]`).classList.add('active');
+                document.getElementById(`tab-${tabName}`).classList.add('active');
+                
+                // 如果是风格设置标签，确保风格选项已加载
+                if (tabName === 'style' && window.styleGrid && window.styleGrid.children.length === 0) {
+                  window.loadDesignStyles && window.loadDesignStyles();
+                }
+              }
+            </script>
+            
+            <div class="tab-content active" id="tab-basic">
+              <div class="settings-section">
+                <div class="setting-item">
+                  <label for="quote-count">金句数量</label>
+                  <div class="number-input">
+                    <button type="button" class="decrement">-</button>
+                    <input type="number" id="quote-count" min="1" max="20" value="8">
+                    <button type="button" class="increment">+</button>
+                  </div>
+                </div>
+                
+                <div class="setting-item">
+                  <label for="cards-per-row">每行卡片数</label>
+                  <div class="number-input">
+                    <button type="button" class="decrement">-</button>
+                    <input type="number" id="cards-per-row" min="1" max="4" value="2">
+                    <button type="button" class="increment">+</button>
+                  </div>
+                </div>
+                
+                <div class="setting-item">
+                  <label for="aspect-ratio">卡片比例</label>
+                  <select id="aspect-ratio" class="select-input">
+                    <option value="16:9" selected>16:9 (宽屏)</option>
+                    <option value="4:3">4:3 (传统)</option>
+                    <option value="1:1">1:1 (正方形)</option>
+                    <option value="9:16">9:16 (竖屏)</option>
+                    <option value="3:4">3:4 (竖版传统)</option>
+                    <option value="2:1">2:1 (超宽)</option>
+                  </select>
+                </div>
+                
+
+              </div>
+            </div>
+            
+            <div class="tab-content" id="tab-style">
+              <div class="settings-section">
+                <div class="setting-item">
+        
+                  <div class="style-mode-selector">
+                    <div class="style-mode-slider position-0" id="style-mode-slider"></div>
+                    <label class="style-mode-option active" data-position="0" onclick="switchStyleMode(this, 'random')">
+                      <input type="radio" name="style-mode" value="random" checked>
+                      随机风格
+                    </label>
+                    <label class="style-mode-option" data-position="1" onclick="switchStyleMode(this, 'single')">
+                      <input type="radio" name="style-mode" value="single">
+                      单一风格
+                    </label>
+                    <label class="style-mode-option" data-position="2" onclick="switchStyleMode(this, 'multiple')">
+                      <input type="radio" name="style-mode" value="multiple">
+                      多种风格
+                    </label>
+                  </div>
+                  
+                  <script>
+                    // 直接在HTML中定义风格模式切换函数
+                    function switchStyleMode(option, mode) {
+                      console.log('切换风格模式到:', mode);
+                      
+                      // 选中单选按钮
+                      const radio = option.querySelector('input[type="radio"]');
+                      if (radio) {
+                        radio.checked = true;
+                      }
+                      
+                      // 更新活动状态
+                      document.querySelectorAll('.style-mode-option').forEach(opt => {
+                        opt.classList.remove('active');
+                      });
+                      option.classList.add('active');
+                      
+                      // 移动滑块
+                      const position = option.getAttribute('data-position');
+                      const slider = document.getElementById('style-mode-slider');
+                      if (slider) {
+                        slider.className = 'style-mode-slider position-' + position;
+                      }
+                      
+                      // 处理风格选择器的显示/隐藏
+                      const styleSelector = document.getElementById('style-selector');
+                      if (styleSelector) {
+                        if (mode === 'random') {
+                          styleSelector.classList.add('hidden');
+                          window.currentConfig.styleSelection = [];
+                        } else {
+                          // 确保风格选择器中有内容
+                          if (window.styleGrid && window.styleGrid.children.length === 0) {
+                            window.loadDesignStyles && window.loadDesignStyles();
+                          }
+                          
+                          styleSelector.classList.remove('hidden');
+                          // 切换模式时重置选择
+                          if (mode === 'single') {
+                            // 单一模式下，只允许一个选择
+                            document.querySelectorAll('.style-card.selected').forEach((card, index) => {
+                              if (index > 0) card.classList.remove('selected');
+                            });
+                            
+                            // 如果有多个选择，只保留第一个
+                            if (window.currentConfig && window.currentConfig.styleSelection && window.currentConfig.styleSelection.length > 1) {
+                              window.currentConfig.styleSelection = [window.currentConfig.styleSelection[0]];
+                            }
+                          }
+                        }
+                      }
+                      
+                      // 更新配置
+                      if (window.updateConfigFromInputs) {
+                        window.updateConfigFromInputs();
+                      }
+                    }
+                  </script>
+                  
+                  <div id="style-selector" class="style-selector hidden">
+                    <div class="style-grid" id="style-grid">
+                      <!-- 风格选项将通过JavaScript动态添加 -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="tab-content" id="tab-advanced">
+              <div class="settings-section">
+                <!-- AI模型设置 -->
+                <div class="setting-group">
+                  <h4 class="setting-group-title">AI模型设置</h4>
+                  
+                  <div class="setting-item">
+                    <label for="ai-provider">AI服务提供商</label>
+                    <select id="ai-provider" class="select-input" onchange="updateAIModels()">
+                      <option value="ark">ARK AI</option>
+                      <option value="tuzi" selected>兔子 AI</option>
+                    </select>
+                  </div>
+                  
+                  <div class="setting-item">
+                    <label for="ai-model">AI模型</label>
+                    <select id="ai-model" class="select-input">
+                      <!-- 模型选项将通过JavaScript动态添加 -->
+                    </select>
+                  </div>
+                  
+                  <script>
+                    // 直接在HTML中定义AI模型选择器初始化函数
+                    // 定义可用的模型列表
+                    const aiModels = {
+                      'ark': [
+                        { id: 'ep-20250330093147-r2gkz', name: 'ARK 默认模型' }
+                      ],
+                      'tuzi': [
+                        { id: 'claude-3-7-sonnet-20250219-o', name: 'Claude 3.7 Sonnet' },
+                        { id: 'claude-3-7-sonnet-thinking', name: 'Claude 3.7 Sonnet Thinking' },
+                        { id: 'claude-3-7-sonnet-20250219-fast', name: 'Claude 3.7 Sonnet Fast' },
+                        { id: 'deepseek-v3-0324', name: 'DeepSeek V3' },
+                        { id: 'gpt-4o-all', name: 'GPT-4 All' }
+                      ]
+                    };
+                    
+                    // 更新AI模型选项
+                    function updateAIModels() {
+                      const aiProviderSelect = document.getElementById('ai-provider');
+                      const aiModelSelect = document.getElementById('ai-model');
+                      
+                      if (!aiProviderSelect || !aiModelSelect) {
+                        console.error('找不到AI提供商或模型选择器');
+                        return;
+                      }
+                      
+                      const provider = aiProviderSelect.value;
+                      console.log('切换AI提供商到:', provider);
+                      
+                      // 清空当前选项
+                      aiModelSelect.innerHTML = '';
+                      
+                      // 添加新选项
+                      if (aiModels[provider]) {
+                        aiModels[provider].forEach(model => {
+                          const option = document.createElement('option');
+                          option.value = model.id;
+                          option.textContent = model.name;
+                          aiModelSelect.appendChild(option);
+                        });
+                      }
+                      
+                      // 更新配置
+                      if (window.updateConfigFromInputs) {
+                        window.updateConfigFromInputs();
+                      }
+                    }
+                    
+                    // 页面加载后初始化AI模型选择器
+                    document.addEventListener('DOMContentLoaded', function() {
+                      updateAIModels();
+                    });
+                  </script>
+                </div>
+                
+                <!-- 内容设置 -->
+                <div class="setting-group">
+                  <h4 class="setting-group-title">内容设置</h4>
+                  
+                  <div class="setting-item">
+                    <label for="max-quote-length">金句最大长度</label>
+                    <div class="number-input">
+                      <button type="button" class="decrement">-</button>
+                      <input type="number" id="max-quote-length" min="10" max="300" step="10" value="100">
+                      <button type="button" class="increment">+</button>
+                    </div>
+                  </div>
+                  
+                  <div class="setting-item">
+                    <label for="context-length">小字副标题长度</label>
+                    <div class="number-input">
+                      <button type="button" class="decrement">-</button>
+                      <input type="number" id="context-length" min="0" max="100" step="1" value="20">
+                      <button type="button" class="increment">+</button>
+                    </div>
+                    <small class="setting-hint">设置为0表示不添加小字副标题</small>
+                  </div>
+                </div>
+                
+                <!-- 尺寸设置 -->
+                <div class="setting-group">
+                  <h4 class="setting-group-title">尺寸设置</h4>
+                  
+                  <div class="setting-item">
+                    <label for="max-height">卡片最大高度(px)</label>
+                    <div class="number-input">
+                      <button type="button" class="decrement">-</button>
+                      <input type="number" id="max-height" value="380">
+                      <button type="button" class="increment">+</button>
+                    </div>
+                    <small class="setting-hint">设置为0表示不限制</small>
+                  </div>
+                  
+                  <div class="setting-item">
+                    <label for="min-height">卡片最小高度(px)</label>
+                    <div class="number-input">
+                      <button type="button" class="decrement">-</button>
+                      <input type="number" id="min-height" value="0" placeholder="不限制">
+                      <button type="button" class="increment">+</button>
+                    </div>
+                    <small class="setting-hint">设置为0表示不限制</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  
+  <footer class="site-footer">
+   
+      <div class="footer-bottom">
+        <p>&copy; 2025 Cards-Go</p>
+      </div>
+
+  </footer>
+  
+  <!-- 打赏模态框 -->
+  <div id="donation-modal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <h3>感谢你的打赏支持</h3>
+      <p>的每一笔打赏都是对我的认可和鼓励</p>
+      <div class="qrcode-container">
+        <img src="/img/donation_qrcode.png" alt="打赏二维码" class="donation-qrcode">
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/script.js"></script>
+</body>
+</html>
