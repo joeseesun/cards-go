@@ -149,7 +149,34 @@ document.addEventListener('DOMContentLoaded', () => {
       const data = await response.json();
       
       // Insert the HTML content
-      cardContainer.innerHTML = data.html;
+      let htmlContent = data.html;
+      
+      // 处理可能的 ```html {content}``` 或 ```html{{content}}``` 格式
+      // 先尝试匹配 ```html {content}``` 格式
+      let htmlCodeBlockRegex = /```html\s*([\s\S]*?)```/;
+      let match = htmlContent.match(htmlCodeBlockRegex);
+      if (match && match[1]) {
+        console.log('检测到代码块格式 ```html {content}```，提取内容');
+        htmlContent = match[1].trim();
+      }
+      
+      // 再尝试匹配 ```html{{content}}``` 格式
+      htmlCodeBlockRegex = /```html\{\{([\s\S]*?)\}\}```/;
+      match = htmlContent.match(htmlCodeBlockRegex);
+      if (match && match[1]) {
+        console.log('检测到代码块格式 ```html{{content}}```，提取内容');
+        htmlContent = match[1].trim();
+      }
+      
+      // 最后尝试匹配单独的 {{content}} 格式
+      const contentRegex = /\{\{([\s\S]*?)\}\}/;
+      match = htmlContent.match(contentRegex);
+      if (match && match[1]) {
+        console.log('检测到 {{content}} 格式，提取内容');
+        htmlContent = match[1].trim();
+      }
+      
+      cardContainer.innerHTML = htmlContent;
       
       // Hide loading and show cards
       loadingElement.style.display = 'none';

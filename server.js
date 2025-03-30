@@ -35,10 +35,7 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// 卡片展示页面
-app.get('/card', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'card.html'));
-});
+// 卡片展示页面路由已备份并删除
 
 // 加载页面路由
 app.get('/loading', (req, res) => {

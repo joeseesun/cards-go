@@ -27,6 +27,14 @@
       </a>
       <h1>CardsGo</h1>
       <p class="theme-title">主题：<span id="theme-display"></span></p>
+      <div class="header-actions">
+        <a href="/api/view-source" target="_blank" class="icon-btn" title="查看源代码">
+          <i class="fas fa-code"></i>
+        </a>
+        <a href="/api/view-prompt" target="_blank" class="icon-btn" title="查看提示词">
+          <i class="fas fa-magic"></i>
+        </a>
+      </div>
     </header>
     
     <div id="loading" class="loading">
@@ -40,8 +48,12 @@
     
     <!-- 添加查看源代码和提示词的入口按钮 -->
     <div class="action-buttons mt-4 flex justify-center space-x-4">
-      <button id="view-source-btn" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded">查看源代码</button>
-      <button id="view-prompt-btn" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded">查看提示词</button>
+      <button id="view-source-btn" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded">
+        <i class="fas fa-code"></i> 查看源代码
+      </button>
+      <button id="view-prompt-btn" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded">
+        <i class="fas fa-magic"></i> 查看提示词
+      </button>
     </div>
   </div>
   

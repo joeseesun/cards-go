@@ -36,8 +36,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     mode: 'creative', // 默认使用创造性模式
     maxHeight: 383, // 默认卡片最大高度(px)
     minHeight: null, // 默认不设置最小高度
-    provider: 'tuzi', // 默认使用兔子 AI
-    model: 'claude-3-7-sonnet-20250219-o' // 默认使用 Claude 3.7 Sonnet 模型
+    provider: 'ark', // 默认使用 ARK AI
+    model: 'ep-20250330093147-r2gkz' // 默认使用 ARK 默认模型
   };
   
   // Store the current configuration

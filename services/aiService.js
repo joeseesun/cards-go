@@ -35,8 +35,8 @@ export const AVAILABLE_MODELS = {
 };
 
 // 默认AI提供商和模型
-export const DEFAULT_PROVIDER = AI_PROVIDERS.TUZI;
-export const DEFAULT_MODEL = 'claude-3-7-sonnet-20250219-o';
+export const DEFAULT_PROVIDER = AI_PROVIDERS.ARK;
+export const DEFAULT_MODEL = 'ep-20250330093147-r2gkz';
 console.log('默认AI提供商已设置为:', DEFAULT_PROVIDER, '默认模型:', DEFAULT_MODEL);
 
 /**

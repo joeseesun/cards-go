@@ -333,31 +333,30 @@ ${theme}`;
             top: 20px;
             right: 20px;
             display: flex;
-            gap: 10px;
+            gap: 15px;
             z-index: 1000;
           }
           .tool-icon {
-            width: 40px;
-            height: 40px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.7);
+            background-color: #f5f5f5;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             transition: all 0.3s ease;
-            opacity: 0.5;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            text-decoration: none;
           }
           .tool-icon:hover {
-            opacity: 1;
-            background-color: rgba(255, 255, 255, 0.9);
+            background-color: #e8f5e9;
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
           }
           .tool-icon i {
-            font-size: 18px;
-            color: #555;
+            font-size: 20px;
+            color: #1a8917;
           }
         </style>
       </head>
@@ -688,7 +687,10 @@ ${theme}`;
     };
     
     // 将原始HTML存储到会话中，以便查看源代码
+    // 保存未添加工具图标的原始HTML
     req.session.originalHtml = html;
+    // 同时保存原始响应，以便查看源代码
+    req.session.originalResponse = response;
     
     // 返回HTML内容
     console.log('生成完成，返回HTML内容，长度:', html.length);
@@ -702,6 +704,115 @@ ${theme}`;
         html = response;
         console.log('使用原始AI响应作为HTML内容，长度:', html.length);
       }
+    }
+    
+    // 在生成的 HTML 内容中直接插入查看源码和提示词的图标
+    // 首先检查 HTML 内容是否已经包含 <body> 标签
+    if (html && html.includes('<body')) {
+      // 如果已经包含 <body>，在 body 标签后插入工具图标
+      const toolsHtml = `
+        <!-- 工具图标 -->
+        <style>
+          /* 工具图标样式 */
+          .tools-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+          }
+          .tool-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background-color: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            text-decoration: none;
+          }
+          .tool-icon:hover {
+            background-color: #e8f5e9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+          }
+          .tool-icon i {
+            font-size: 20px;
+            color: #1a8917;
+          }
+        </style>
+        <div class="tools-container">
+          <a href="/api/view-source" target="_blank" class="tool-icon" title="查看源代码">
+            <i class="fas fa-code"></i>
+          </a>
+          <a href="/api/view-prompt" target="_blank" class="tool-icon" title="查看提示词">
+            <i class="fas fa-magic"></i>
+          </a>
+        </div>
+      `;
+      
+      // 检查是否已经包含 Font Awesome
+      if (!html.includes('font-awesome')) {
+        // 如果没有 Font Awesome，在 head 标签中添加
+        html = html.replace('<head>', '<head>\n<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">');
+      }
+      
+      // 在 body 标签后插入工具图标
+      html = html.replace('<body>', '<body>\n' + toolsHtml);
+    } else {
+      // 如果不包含 <body>，则在内容开头添加工具图标
+      const toolsHtml = `
+        <!-- 工具图标 -->
+        <style>
+          /* 工具图标样式 */
+          .tools-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+          }
+          .tool-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background-color: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            text-decoration: none;
+          }
+          .tool-icon:hover {
+            background-color: #e8f5e9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+          }
+          .tool-icon i {
+            font-size: 20px;
+            color: #1a8917;
+          }
+        </style>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+        <div class="tools-container">
+          <a href="/api/view-source" target="_blank" class="tool-icon" title="查看源代码">
+            <i class="fas fa-code"></i>
+          </a>
+          <a href="/api/view-prompt" target="_blank" class="tool-icon" title="查看提示词">
+            <i class="fas fa-magic"></i>
+          </a>
+        </div>
+      `;
+      
+      // 在内容开头添加工具图标
+      html = toolsHtml + html;
     }
     
     res.json({ html: html });
@@ -850,7 +961,7 @@ router.get('/view-source', (req, res) => {
     <a href="javascript:history.back()" class="back-button">返回卡片</a>
   </div>
   <div style="position: relative;">
-    <pre id="source-code">${escapeHtml(displayHtml)}</pre>
+    <textarea id="source-code" readonly style="width: 100%; height: 400px; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; font-size: 14px; padding: 15px; border-radius: 5px; border: 1px solid #ddd; background-color: #f5f5f5;">${displayHtml}</textarea>
     <button class="copy-button" onclick="copyToClipboard()">
       <i class="fas fa-copy"></i> 复制代码
     </button>
