@@ -704,6 +704,26 @@ ${theme}`;
         html = response;
         console.log('使用原始AI响应作为HTML内容，长度:', html.length);
       }
+      
+      // 检查是否是 Markdown 代码块格式
+      const htmlCodeBlockRegex = /^```html\s*([\s\S]*?)```\s*$/;
+      const match = response.match(htmlCodeBlockRegex);
+      if (match && match[1]) {
+        html = match[1].trim();
+        console.log('从 Markdown 代码块中提取 HTML 内容，长度:', html.length);
+      }
+    }
+    
+    // 处理可能的 Markdown 代码块格式
+    if (html) {
+      // 删除开头的 ```html 标记
+      if (html.trim().startsWith('```html')) {
+        html = html.replace(/^```html\s*/, '');
+      }
+      // 删除结尾的 ``` 标记
+      if (html.trim().endsWith('```')) {
+        html = html.replace(/```\s*$/, '');
+      }
     }
     
     // 在生成的 HTML 内容中直接插入查看源码和提示词的图标
