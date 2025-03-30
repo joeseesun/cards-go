@@ -4,6 +4,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import session from 'express-session';
+import compression from 'compression';
 import apiRoutes from './routes/api.js';
 
 // 配置环境变量
@@ -16,6 +17,7 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // 中间件
+app.use(compression()); // 添加压缩中间件
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 
